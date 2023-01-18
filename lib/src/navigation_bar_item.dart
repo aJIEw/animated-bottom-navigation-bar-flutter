@@ -4,6 +4,7 @@ import 'package:animated_bottom_navigation_bar/src/tab_item.dart';
 
 class NavigationBarItem extends StatelessWidget {
   final bool isActive;
+  final bool hideAnimation;
   final double bubbleRadius;
   final double maxBubbleRadius;
   final Color? bubbleColor;
@@ -17,6 +18,7 @@ class NavigationBarItem extends StatelessWidget {
 
   NavigationBarItem({
     required this.isActive,
+    this.hideAnimation = false,
     required this.bubbleRadius,
     required this.maxBubbleRadius,
     required this.bubbleColor,
@@ -34,23 +36,20 @@ class NavigationBarItem extends StatelessWidget {
     return Expanded(
       child: SizedBox.expand(
         child: CustomPaint(
-          painter: BubblePainter(
-            bubbleRadius: isActive ? bubbleRadius : 0,
-            bubbleColor: bubbleColor,
-            maxBubbleRadius: maxBubbleRadius,
-          ),
+          painter: hideAnimation
+              ? null
+              : BubblePainter(
+                  bubbleRadius: isActive ? bubbleRadius : 0,
+                  bubbleColor: bubbleColor,
+                  maxBubbleRadius: maxBubbleRadius,
+                ),
           child: InkWell(
-            child: Transform.scale(
-              scale: isActive ? iconScale : 1,
-              child: TabItem(
-                isActive: isActive,
-                iconData: iconData,
-                iconSize: iconSize,
-                activeColor: activeColor,
-                inactiveColor: inactiveColor,
-                child: child,
-              ),
-            ),
+            child: hideAnimation
+                ? _buildTabItem()
+                : Transform.scale(
+                    scale: isActive ? iconScale : 1,
+                    child: _buildTabItem(),
+                  ),
             splashColor: Colors.transparent,
             focusColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -61,4 +60,13 @@ class NavigationBarItem extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildTabItem() => TabItem(
+        isActive: isActive,
+        iconData: iconData,
+        iconSize: iconSize,
+        activeColor: activeColor,
+        inactiveColor: inactiveColor,
+        child: child,
+      );
 }

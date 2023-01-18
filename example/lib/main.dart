@@ -197,6 +197,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             safeAreaValues: const SafeAreaValues(bottom: false),
             onTap: (index) => setState(() => _bottomNavIndex = index),
             // hideAnimationController: _hideBottomBarAnimationController,
+            disableTabSelectedAnimation: true,
             shadow: BoxShadow(
               offset: Offset(0, 1),
               blurRadius: 12,

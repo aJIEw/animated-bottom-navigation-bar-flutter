@@ -127,6 +127,9 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
   /// Makes sense only if [backgroundColor] opacity is < 1.
   final bool blurEffect;
 
+  /// Hide the animation after tab is selected. Default to false.
+  final bool disableTabSelectedAnimation;
+
   static const _defaultSplashRadius = 24.0;
 
   AnimatedBottomNavigationBar._internal({
@@ -164,6 +167,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     this.hideAnimationController,
     this.backgroundGradient,
     this.blurEffect = false,
+    this.disableTabSelectedAnimation = false,
   })  : assert(icons != null || itemCount != null),
         assert(
           ((itemCount ?? icons!.length) >= 2) &&
@@ -201,6 +205,10 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     Animation<double>? notchAndCornersAnimation,
     double? leftCornerRadius,
     double? rightCornerRadius,
+    double? bottomLeftCornerRadius,
+    double? bottomRightCornerRadius,
+    double? marginLeft,
+    double? marginRight,
     double? iconSize,
     NotchSmoothness? notchSmoothness,
     GapLocation? gapLocation,
@@ -214,6 +222,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     AnimationController? hideAnimationController,
     Gradient? backgroundGradient,
     bool blurEffect = false,
+    bool disableTabSelectedAnimation = false,
   }) : this._internal(
           key: key,
           icons: icons,
@@ -230,6 +239,10 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
           notchAndCornersAnimation: notchAndCornersAnimation,
           leftCornerRadius: leftCornerRadius ?? 0,
           rightCornerRadius: rightCornerRadius ?? 0,
+          bottomLeftCornerRadius: bottomLeftCornerRadius,
+          bottomRightCornerRadius: bottomRightCornerRadius,
+          marginLeft: marginLeft,
+          marginRight: marginRight,
           iconSize: iconSize,
           notchSmoothness: notchSmoothness,
           gapLocation: gapLocation ?? GapLocation.end,
@@ -243,6 +256,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
           hideAnimationController: hideAnimationController,
           backgroundGradient: backgroundGradient,
           blurEffect: blurEffect,
+          disableTabSelectedAnimation: disableTabSelectedAnimation,
         );
 
   AnimatedBottomNavigationBar.builder({
@@ -276,6 +290,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     AnimationController? hideAnimationController,
     Gradient? backgroundGradient,
     bool blurEffect = false,
+    bool disableTabSelectedAnimation = false,
   }) : this._internal(
           key: key,
           tabBuilder: tabBuilder,
@@ -307,6 +322,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
           hideAnimationController: hideAnimationController,
           backgroundGradient: backgroundGradient,
           blurEffect: blurEffect,
+          disableTabSelectedAnimation: disableTabSelectedAnimation,
         );
 
   @override
@@ -466,6 +482,7 @@ class _AnimatedBottomNavigationBarState
       items.add(
         NavigationBarItem(
           isActive: isActive,
+          hideAnimation: widget.disableTabSelectedAnimation,
           bubbleRadius: _bubbleRadius,
           maxBubbleRadius: widget.splashRadius,
           bubbleColor: widget.splashColor,
