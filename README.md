@@ -4,6 +4,16 @@ AnimatedBottomNavigationBar is a customizable widget inspired by [dribble shot](
 
 Made in [lanars.com](https://lanars.com).
 
+---
+
+Added bottom radius and horizontal margin in this fork.
+
+<details><summary>Click to view screenshot</summary>
+
+<img src="https://raw.githubusercontent.com/aJIEw/animated-bottom-navigation-bar-flutter/master/doc/assets/example-floating-bar.png" width="300">
+
+</details>
+
 [![pub package](https://img.shields.io/pub/v/animated_bottom_navigation_bar.svg)](https://pub.dev/packages/animated_bottom_navigation_bar)
 
 <img src="https://raw.githubusercontent.com/LanarsInc/animated-bottom-navigation-bar-flutter/master/doc/assets/animated-bottom-navigation-bar.gif" width="300">

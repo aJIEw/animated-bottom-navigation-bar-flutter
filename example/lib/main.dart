@@ -46,6 +46,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late CurvedAnimation borderRadiusCurve;
   late AnimationController _hideBottomBarAnimationController;
 
+  final labelList = <String>['Home', 'Explore', 'Search', 'Mine'];
+
   final iconList = <IconData>[
     Icons.brightness_5,
     Icons.brightness_4,
@@ -149,48 +151,58 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-          itemCount: iconList.length,
-          tabBuilder: (int index, bool isActive) {
-            final color = isActive ? HexColor('#FFA400') : Colors.white;
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  iconList[index],
-                  size: 24,
-                  color: color,
-                ),
-                const SizedBox(height: 4),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: AutoSizeText(
-                    "brightness $index",
-                    maxLines: 1,
-                    style: TextStyle(color: color),
-                    group: autoSizeGroup,
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: AnimatedBottomNavigationBar.builder(
+            itemCount: iconList.length,
+            tabBuilder: (int index, bool isActive) {
+              final color = isActive ? HexColor('#FFA400') : Colors.white;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    iconList[index],
+                    size: 24,
+                    color: color,
                   ),
-                )
-              ],
-            );
-          },
-          backgroundColor: HexColor('#373A36'),
-          activeIndex: _bottomNavIndex,
-          splashColor: HexColor('#FFA400'),
-          notchAndCornersAnimation: borderRadiusAnimation,
-          splashSpeedInMilliseconds: 300,
-          notchSmoothness: NotchSmoothness.defaultEdge,
-          gapLocation: GapLocation.center,
-          leftCornerRadius: 32,
-          rightCornerRadius: 32,
-          onTap: (index) => setState(() => _bottomNavIndex = index),
-          hideAnimationController: _hideBottomBarAnimationController,
-          shadow: BoxShadow(
-            offset: Offset(0, 1),
-            blurRadius: 12,
-            spreadRadius: 0.5,
-            color: HexColor('#FFA400'),
+                  const SizedBox(height: 4),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: AutoSizeText(
+                      labelList[index],
+                      maxLines: 1,
+                      style: TextStyle(color: color),
+                      group: autoSizeGroup,
+                    ),
+                  )
+                ],
+              );
+            },
+            height: 70,
+            backgroundColor: HexColor('#373A36'),
+            activeIndex: _bottomNavIndex,
+            splashColor: HexColor('#FFA400'),
+            notchAndCornersAnimation: borderRadiusAnimation,
+            splashSpeedInMilliseconds: 300,
+            notchSmoothness: NotchSmoothness.softEdge,
+            gapLocation: GapLocation.center,
+            leftCornerRadius: 20,
+            rightCornerRadius: 20,
+            bottomLeftCornerRadius: 20,
+            bottomRightCornerRadius: 20,
+            marginLeft: 20,
+            marginRight: 20,
+            notchMargin: 10,
+            safeAreaValues: const SafeAreaValues(bottom: false),
+            onTap: (index) => setState(() => _bottomNavIndex = index),
+            // hideAnimationController: _hideBottomBarAnimationController,
+            shadow: BoxShadow(
+              offset: Offset(0, 1),
+              blurRadius: 12,
+              spreadRadius: 0.5,
+              color: HexColor('#FFA400'),
+            ),
           ),
         ),
       ),
@@ -271,6 +283,14 @@ class _NavigationScreenState extends State<NavigationScreen>
               ),
             ),
           ),
+          ...List.generate(
+              20,
+              (index) => ListTile(
+                  dense: true,
+                  title: Text(
+                    'Flutter ❤︎ Dart & Flutter ❤︎ Dart & Flutter ❤︎ Dart & Flutter',
+                    style: TextStyle(color: Colors.black),
+                  )))
         ],
       ),
     );

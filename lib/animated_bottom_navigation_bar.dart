@@ -56,6 +56,18 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
   /// Optional custom tab bar top-right corner radius. Useless with [GapLocation.end]. Default is 0.
   final double? rightCornerRadius;
 
+  /// Optional custom tab bar bottom-left corner radius. Default is 0.
+  final double? bottomLeftCornerRadius;
+
+  /// Optional custom tab bar bottom-right corner radius. Default is 0.
+  final double? bottomRightCornerRadius;
+
+  /// Optional custom navigation bar's left margin. Default is 0.
+  final double? marginLeft;
+
+  /// Optional custom navigation bar's right margin. Default is 0.
+  final double? marginRight;
+
   /// Optional custom tab bar background color. Default is [Colors.white].
   final Color? backgroundColor;
 
@@ -135,6 +147,10 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     this.notchAndCornersAnimation,
     this.leftCornerRadius,
     this.rightCornerRadius,
+    this.bottomLeftCornerRadius,
+    this.bottomRightCornerRadius,
+    this.marginLeft,
+    this.marginRight,
     this.iconSize,
     this.notchSmoothness,
     this.gapLocation,
@@ -244,6 +260,10 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     Animation<double>? notchAndCornersAnimation,
     double? leftCornerRadius,
     double? rightCornerRadius,
+    double? bottomLeftCornerRadius,
+    double? bottomRightCornerRadius,
+    double? marginLeft,
+    double? marginRight,
     NotchSmoothness? notchSmoothness,
     GapLocation? gapLocation,
     double? gapWidth,
@@ -271,6 +291,10 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
           notchAndCornersAnimation: notchAndCornersAnimation,
           leftCornerRadius: leftCornerRadius ?? 0,
           rightCornerRadius: rightCornerRadius ?? 0,
+          bottomLeftCornerRadius: bottomLeftCornerRadius,
+          bottomRightCornerRadius: bottomRightCornerRadius,
+          marginLeft: marginLeft,
+          marginRight: marginRight,
           notchSmoothness: notchSmoothness,
           gapLocation: gapLocation ?? GapLocation.end,
           gapWidth: gapWidth,
@@ -357,6 +381,10 @@ class _AnimatedBottomNavigationBarState
         gapLocation: widget.gapLocation ?? GapLocation.end,
         leftCornerRadius: widget.leftCornerRadius ?? 0.0,
         rightCornerRadius: widget.rightCornerRadius ?? 0.0,
+        bottomLeftCornerRadius: widget.bottomLeftCornerRadius ?? 0,
+        bottomRightCornerRadius: widget.bottomRightCornerRadius ?? 0,
+        marginLeft: widget.marginLeft ?? 0,
+        marginRight: widget.marginRight ?? 0,
       ),
       geometry: geometryListenable,
       notchMargin: widget.notchMargin ?? 8,
@@ -406,6 +434,8 @@ class _AnimatedBottomNavigationBarState
   Widget _buildBody() {
     return Container(
       height: widget.height ?? kBottomNavigationBarHeight,
+      margin: EdgeInsets.only(
+          left: widget.marginLeft ?? 0, right: widget.marginRight ?? 0),
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? Colors.white,
         gradient: widget.backgroundGradient,

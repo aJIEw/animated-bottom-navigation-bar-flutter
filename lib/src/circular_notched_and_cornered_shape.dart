@@ -15,12 +15,20 @@ class CircularNotchedAndCorneredRectangle extends NotchedShape {
   final GapLocation gapLocation;
   final double leftCornerRadius;
   final double rightCornerRadius;
+  final double bottomLeftCornerRadius;
+  final double bottomRightCornerRadius;
+  final double marginLeft;
+  final double marginRight;
 
   CircularNotchedAndCorneredRectangle({
     required this.notchSmoothness,
     required this.gapLocation,
     required this.leftCornerRadius,
     required this.rightCornerRadius,
+    this.bottomLeftCornerRadius = 0,
+    this.bottomRightCornerRadius = 0,
+    this.marginLeft = 0,
+    this.marginRight = 0,
     this.animation,
   });
 
@@ -37,29 +45,50 @@ class CircularNotchedAndCorneredRectangle extends NotchedShape {
   /// the guest circle.
   @override
   Path getOuterPath(Rect host, Rect? guest) {
+    double leftCornerRadius = this.leftCornerRadius * (animation?.value ?? 1);
+    double rightCornerRadius = this.rightCornerRadius * (animation?.value ?? 1);
+    var startX = host.left + marginLeft;
+    var endX = host.right - marginRight;
+
+    Path drawBeforeCenterPath(Path path) {
+      return path
+        ..moveTo(startX, host.bottom - bottomLeftCornerRadius)
+        ..lineTo(startX, host.top + leftCornerRadius)
+        ..arcToPoint(
+          Offset(startX + leftCornerRadius, host.top),
+          radius: Radius.circular(leftCornerRadius),
+          clockwise: true,
+        );
+    }
+
+    Path drawAfterCenterPath(Path path) {
+      return path
+        ..lineTo(endX - rightCornerRadius, host.top)
+        ..arcToPoint(
+          Offset(endX, host.top + rightCornerRadius),
+          radius: Radius.circular(rightCornerRadius),
+          clockwise: true,
+        )
+        ..lineTo(endX, host.bottom - bottomRightCornerRadius)
+        ..arcToPoint(
+          Offset(endX - bottomRightCornerRadius, host.bottom),
+          radius: Radius.circular(bottomRightCornerRadius),
+          clockwise: true,
+        )
+        ..lineTo(startX + bottomLeftCornerRadius, host.bottom)
+        ..arcToPoint(
+          Offset(startX, host.bottom - bottomLeftCornerRadius),
+          radius: Radius.circular(bottomLeftCornerRadius),
+          clockwise: true,
+        );
+    }
+
     if (guest == null || !host.overlaps(guest)) {
       if (this.rightCornerRadius > 0 || this.leftCornerRadius > 0) {
-        double leftCornerRadius =
-            this.leftCornerRadius * (animation?.value ?? 1);
-        double rightCornerRadius =
-            this.rightCornerRadius * (animation?.value ?? 1);
-        return Path()
-          ..moveTo(host.left, host.bottom)
-          ..lineTo(host.left, host.top + leftCornerRadius)
-          ..arcToPoint(
-            Offset(host.left + leftCornerRadius, host.top),
-            radius: Radius.circular(leftCornerRadius),
-            clockwise: true,
-          )
-          ..lineTo(host.right - rightCornerRadius, host.top)
-          ..arcToPoint(
-            Offset(host.right, host.top + rightCornerRadius),
-            radius: Radius.circular(rightCornerRadius),
-            clockwise: true,
-          )
-          ..lineTo(host.right, host.bottom)
-          ..lineTo(host.left, host.bottom)
-          ..close();
+        var path = Path();
+        drawBeforeCenterPath(path);
+        drawAfterCenterPath(path);
+        return path..close();
       }
       return Path()..addRect(host);
     }
@@ -84,8 +113,6 @@ class CircularNotchedAndCorneredRectangle extends NotchedShape {
     // The guest's shape is a circle bounded by the guest rectangle.
     // So the guest's radius is half the guest width.
     double notchRadius = guest.width / 2 * (animation?.value ?? 1);
-    double leftCornerRadius = this.leftCornerRadius * (animation?.value ?? 1);
-    double rightCornerRadius = this.rightCornerRadius * (animation?.value ?? 1);
 
     // We build a path for the notch from 3 segments:
     // Segment A - a Bezier curve from the host's top edge to segment B.
@@ -125,14 +152,10 @@ class CircularNotchedAndCorneredRectangle extends NotchedShape {
     // translate all points back to the absolute coordinate system.
     for (int i = 0; i < p.length; i += 1) p[i] += guest.center;
 
-    return Path()
-      ..moveTo(host.left, host.bottom)
-      ..lineTo(host.left, host.top + leftCornerRadius)
-      ..arcToPoint(
-        Offset(host.left + leftCornerRadius, host.top),
-        radius: Radius.circular(leftCornerRadius),
-        clockwise: true,
-      )
+    var path = Path();
+    drawBeforeCenterPath(path);
+    // draw chiseled section for docked fab
+    path
       ..lineTo(p[0].dx, p[0].dy)
       ..quadraticBezierTo(p[1].dx, p[1].dy, p[2].dx, p[2].dy)
       ..arcToPoint(
@@ -140,16 +163,9 @@ class CircularNotchedAndCorneredRectangle extends NotchedShape {
         radius: Radius.circular(notchRadius),
         clockwise: false,
       )
-      ..quadraticBezierTo(p[4].dx, p[4].dy, p[5].dx, p[5].dy)
-      ..lineTo(host.right - rightCornerRadius, host.top)
-      ..arcToPoint(
-        Offset(host.right, host.top + rightCornerRadius),
-        radius: Radius.circular(rightCornerRadius),
-        clockwise: true,
-      )
-      ..lineTo(host.right, host.bottom)
-      ..lineTo(host.left, host.bottom)
-      ..close();
+      ..quadraticBezierTo(p[4].dx, p[4].dy, p[5].dx, p[5].dy);
+    drawAfterCenterPath(path);
+    return path..close();
   }
 }
 
